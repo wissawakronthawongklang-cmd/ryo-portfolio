@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Video Portfolio</title>
+    <style>
+        /* ================= Reset & Global ================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+
+        /* ================= Navigator (Left Sidebar) ================= */
+        .sidebar {
+            width: 250px;
+            background-color: #1a1a1a;
+            padding: 30px 20px;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+            transition: transform 0.3s ease-in-out;
+            z-index: 100;
+            border-right: 1px solid #333;
+        }
+        
+        .sidebar h2 {
+            color: #00d2ff;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .nav-menu {
+            list-style: none;
+        }
+        .nav-menu li {
+            margin-bottom: 20px;
+        }
+        .nav-menu a {
+            color: #b3b3b3;
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: block;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .nav-menu a:hover, .nav-menu a.active {
+            background-color: #333;
+            color: #fff;
+        }
+
+        /* ================= Mobile Hamburger Menu ================= */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 101;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: 1px solid #333;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+        }
+
+        /* ================= Main Content ================= */
+        .main-content {
+            margin-left: 250px;
+            flex: 1;
+            width: calc(100% - 250px);
+        }
+
+        /* ================= Header Image ================= */
+        .header-hero {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            background-image: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        .header-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .header-hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+        }
+        .header-hero p {
+            font-size: 1.2rem;
+            color: #e0e0e0;
+        }
+
+        /* ================= Global Section Styles ================= */
+        .content-section {
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .section-title {
+            margin-bottom: 30px;
+            font-size: 2rem;
+            border-bottom: 2px solid #333;
+            padding-top: 80px;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        /* ================= Brand Logos Section ================= */
+        .brands-wrapper {
+            display: flex;
+            flex-wrap: wrap; /* Desktop ให้ปัดบรรทัดใหม่เมื่อเต็ม */
+            gap: 20px;
+            justify-content: center;
+        }
+        .brand-circle {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%; /* ทำให้เป็นวงกลม */
+            background-color: #222;
+            border: 2px solid #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        .brand-circle:hover {
+            transform: scale(1.1); /* ขยายเมื่อเอาเมาส์ชี้ */
+            border-color: #00d2ff;
+        }
+        .brand-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* ตัดรูปให้เต็มวงกลมพอดี */
+            /* หากโลโก้คุณเป็นพื้นหลังขาว ให้เปลี่ยนเป็น object-fit: contain; แทน */
+        }
+
+        /* ================= Portfolio Video Section ================= */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        .video-card {
+            width: 100%;
+            aspect-ratio: 9 / 16;
+            background-color: #222;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            transition: transform 0.3s;
+        }
+        .video-card:hover {
+            transform: translateY(-5px);
+        }
+        .video-card iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* ================= Footer Section (เพิ่มใหม่) ================= */
+        .site-footer {
+            background-color: #0a0a0a; /* โทนสีแตกต่างจาก body เล็กน้อย (ดำสนิทขึ้น) */
+            border-top: 1px solid #222;
+            padding: 30px 40px;
+            margin-top: auto; /* ดัน Footer ไปล่างสุดเสมอ */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .footer-text p {
+            color: #999;
+            font-size: 1rem;
+        }
+        .footer-socials {
+            display: flex;
+            gap: 15px;
+        }
+        .footer-socials a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: #1a1a1a;
+            color: #fff;
+            border-radius: 50%;
+            text-decoration: none;
+            transition: background-color 0.3s, transform 0.3s;
+            border: 1px solid #333;
+        }
+        .footer-socials a:hover {
+            background-color: #00d2ff;
+            color: #121212;
+            transform: translateY(-3px);
+        }
+
+        /* ================= Responsive Design ================= */
+        
+        /* Tablet: 2 คอลัมน์ หรือลดขนาด */
+        @media (max-width: 1024px) {
+            .video-grid {
+                gap: 20px;
+            }
+            .header-hero h1 {
+                font-size: 2.8rem;
+            }
+            .brand-circle {
+                width: 80px;
+                height: 80px;
+            }
+        }
+
+        /* Phone: จัดเรียงแถวเดียว + Horizontal Scroll */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+            .header-hero {
+                height: 300px;
+            }
+
+            .content-section {
+                padding: 20px 0;
+            }
+            .section-title {
+                margin-left: 20px;
+            }
+
+            /* --- Logo Section บนมือถือ (แถวเดียวปัดขวา) --- */
+            .brands-wrapper {
+                flex-wrap: nowrap; /* ไม่ให้ปัดบรรทัดใหม่ */
+                justify-content: flex-start;
+                overflow-x: auto; /* เลื่อนแนวนอน */
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+                padding: 10px 20px;
+                gap: 15px;
+            }
+            .brand-circle {
+                flex: 0 0 auto; /* ป้องกันไม่ให้วงกลมหดตัว */
+                width: 70px;
+                height: 70px;
+                scroll-snap-align: center;
+            }
+
+            /* --- Video Section บนมือถือ (แถวเดียวปัดขวา) --- */
+            .video-grid {
+                display: flex;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+                gap: 15px;
+                padding: 10px 20px 40px 20px;
+            }
+            .video-card {
+                flex: 0 0 75%;
+                scroll-snap-align: center;
+            }
+
+            /* ซ่อน Scrollbar แนวนอน (ทั้ง Logo และ Video) */
+            .brands-wrapper::-webkit-scrollbar,
+            .video-grid::-webkit-scrollbar {
+                display: none;
+            }
+            .brands-wrapper,
+            .video-grid {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+        /* Footer บนมือถือ จัดเรียงกึ่งกลางเพื่อความสวยงาม */
+            .site-footer {
+                flex-direction: column;
+                text-align: center;
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- Mobile Hamburger Menu Button -->
+        <button class="menu-toggle" id="menuToggle">☰ Menu</button>
+
+        <!-- Left Navigator -->
+        <nav class="sidebar" id="sidebar">
+    <!-- เปลี่ยน h2 เป็นลิงก์ และใส่ id="go-to-top" -->
+    <a href="#" id="go-to-top" style="text-decoration: none;">
+        <h2>RYO PORTFOLIO</h2>
+    </a>
+    <ul class="nav-menu">
+                <li><a href="#FASHION">FASHION</a></li>
+                <li><a href="#PROMO">PROMOTION</a></li>
+                <li><a href="#INSERT">INSERT MOTION</a></li>
+                <li><a href="#CAM">CAMPAIGN</a></li>
+                <li><a href="#EDU">EDUCATION</a></li>
+                <li><a href="#TREND">TRENDY</a></li>
+                <li><a href="#BRANDS">ALL BRANDS</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            
+            <!-- Header Image -->
+            <header class="header-hero">
+                <div class="header-overlay">
+                    <h1>Creative Works</h1>
+                    <p>My Latest Vertical Video Projects</p>
+                </div>
+            </header>
+
+            <!-- Video Grid Section -->
+            <section class="portfolio-section">
+                <h2 class="section-title" id="FASHION">FASHION</h2>
+                
+                <div class="video-grid">
+                    <!-- วิดีโอ 1 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_1/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 2 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_2/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 3 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_3/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 4 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_4/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 5 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_5/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 6 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_6/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 7 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_7/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 8 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_8/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 9 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_9/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                </div>
+
+                <h2 class="section-title" id="PROMO">PROMOTION</h2>
+                
+                <div class="video-grid">
+                    <!-- วิดีโอ 1 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_1/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 2 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_2/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 3 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_3/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 4 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_4/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 5 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_5/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 6 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_6/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 7 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_7/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 8 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_8/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 9 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_9/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                </div>
+
+                <h2 class="section-title" id="INSERT">INSERT MOTION</h2>
+                
+                <div class="video-grid">
+                    <!-- วิดีโอ 1 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_1/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 2 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_2/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 3 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_3/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 4 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_4/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 5 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_5/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 6 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_6/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 7 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_7/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 8 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_8/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 9 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_9/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                </div>
+
+                <h2 class="section-title" id="CAM">CAMPAIGN</h2>
+                
+                <div class="video-grid">
+                    <!-- วิดีโอ 1 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_1/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 2 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_2/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 3 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_3/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 4 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_4/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 5 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_5/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 6 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_6/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 7 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_7/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 8 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_8/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 9 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_9/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                </div>
+
+                <h2 class="section-title" id="EDU">EDUCATION</h2>
+                
+                <div class="video-grid">
+                    <!-- วิดีโอ 1 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_1/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 2 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_2/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 3 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_3/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 4 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_4/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 5 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_5/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 6 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_6/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 7 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_7/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 8 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_8/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 9 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_9/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                </div>
+
+                <h2 class="section-title" id="TREND">TRENDY</h2>
+
+                <div class="video-grid">
+                    <!-- วิดีโอ 1 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_1/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 2 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_2/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 3 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_3/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 4 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_4/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 5 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_5/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 6 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_6/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 7 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_7/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 8 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_8/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <!-- วิดีโอ 9 -->
+                    <div class="video-card">
+                        <iframe src="https://drive.google.com/file/d/YOUR_VIDEO_ID_9/preview" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Brand Logos Section (เพิ่มใหม่ 24 โลโก้) -->
+            <section id="BRANDS" class="content-section">
+                <h2 class="section-title">ALL BRANDS</h2>
+                
+                <div class="brands-wrapper">
+                    <!-- โลโก้ 1 ถึง 24 -->
+                    <!-- หมายเหตุ: เปลี่ยน src="..." เป็นลิงก์รูปโลโก้ของคุณได้เลย -->
+                    <div class="brand-circle"><img src="https://ui-avatars.com/api/?name=B+1&background=random&color=fff" alt="Logo 1"></div>
+                    <div class="brand-circle"><img src="https://ui-avatars.com/api/?name=B+2&background=random&color=fff" alt="Logo 2"></div>
+                    <div class="brand-circle"><img src="https://ui-avatars.com/api/?name=B+3&background=random&color=fff" alt="Logo 3"></div>
+                    <div class="brand-circle"><img src="https://ui-avatars.com/api/?name=B+4&background=random&color=fff" alt="Logo 4"></div>
+                    <div class="brand-circle"><img src="https://ui-avatars.com/api/?name=B+5&background=random&color=fff" alt="Logo 5"></div>
+                    <div class="brand-circle"><img src="https://ui-avatars.com/api/?name=B+6&background=random&color=fff" alt="Logo 6"></div>
+                    <div class="brand-circle"><img src="https://ui-avatars.com/api/?name=B+7&background=random&color=fff" alt="Logo 7"></div>
+                    <div class="brand-circle"><img src="https://ui-avatars.com/api/?name=B+8&background=random&color=fff" alt="Logo 8"></div>
+                    
+                    <div class="brand-circle"><img src="https://ui-avatars.com/api/?name=B+9&background=random&color=fff" alt="Logo 9"></div>
+                    <div class="brand-circle"><img src="https://ui-avatars.com/api/?name=B+10&background=random&color=fff" alt="Logo 10"></div>
+                    <div class="brand-circle"><img src="https://ui-avatars.com/api/?name=B+11&background=random&color=fff" alt="Logo 11"></div>
+                    <div class="brand-circle"><img src="https://ui-avatars.com/api/?name=B+12&background=random&color=fff" alt="Logo 12"></div>
+                    <div class="brand-circle"><img src="https://ui-avatars.com/api/?name=B+13&background=random&color=fff" alt="Logo 13"></div>
+                    <div class="brand-circle"><img src="https://ui-avatars.com/api/?name=B+14&background=random&color=fff" alt="Logo 14"></div>
+                    <div class="brand-circle"><img src="https://ui-avatars.com/api/?name=B+15&background=random&color=fff" alt="Logo 15"></div>
+                    <div class="brand-circle"><img src="https://ui-avatars.com/api/?name=B+16&background=random&color=fff" alt="Logo 16"></div>
+                    
+                    <div class="brand-circle"><img src="https://ui-avatars.com/api/?name=B+17&background=random&color=fff" alt="Logo 17"></div>
+                    <div class="brand-circle"><img src="https://ui-avatars.com/api/?name=B+18&background=random&color=fff" alt="Logo 18"></div>
+                    <div class="brand-circle"><img src="https://ui-avatars.com/api/?name=B+19&background=random&color=fff" alt="Logo 19"></div>
+                    <div class="brand-circle"><img src="https://ui-avatars.com/api/?name=B+20&background=random&color=fff" alt="Logo 20"></div>
+                    <div class="brand-circle"><img src="https://ui-avatars.com/api/?name=B+21&background=random&color=fff" alt="Logo 21"></div>
+                    <div class="brand-circle"><img src="https://ui-avatars.com/api/?name=B+22&background=random&color=fff" alt="Logo 22"></div>
+                    <div class="brand-circle"><img src="https://ui-avatars.com/api/?name=B+23&background=random&color=fff" alt="Logo 23"></div>
+                    <div class="brand-circle"><img src="https://ui-avatars.com/api/?name=B+24&background=random&color=fff" alt="Logo 24"></div>
+                </div>
+            </section>
+            
+            <!-- Footer Section (เพิ่มใหม่) -->
+            <footer id="contact" class="site-footer">
+                <div class="footer-text">
+                    <p>ขอบคุณที่รับชมผลงานครับ หวังว่าจะได้ร่วมงานกันนะ :)</p>
+                </div>
+                <div class="footer-socials">
+                    <!-- โซเชียล 3 อัน (สามารถเปลี่ยนลิงก์ตรง href="#") -->
+                    <a href="#" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+   <!-- JavaScript -->
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+
+        // สลับเปิด/ปิด Sidebar (Mobile)
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            if(sidebar.classList.contains('open')) {
+                menuToggle.innerHTML = '✕ Close';
+            } else {
+                menuToggle.innerHTML = '☰ Menu';
+            }
+        });
+
+        // คลิกพื้นที่ว่างเพื่อปิดเมนู (Mobile)
+        document.querySelector('.main-content').addEventListener('click', () => {
+            if(window.innerWidth <= 768 && sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+                menuToggle.innerHTML = '☰ Menu';
+            }
+        });
+
+        // ==========================================
+        // ฟังก์ชัน Go to Top เมื่อคลิกคำว่า PORTFOLIO
+        // ==========================================
+        const goToTopBtn = document.getElementById('go-to-top');
+
+        goToTopBtn.addEventListener('click', function(e) {
+            e.preventDefault(); // กันไม่ให้หน้ากระตุกไปด้านบนสุดทันที
+
+            // สั่งให้หน้าหลักเลื่อนขึ้นบนสุดอย่างนุ่มนวล
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+
+            // (เสริม) ถ้าดูบนมือถือและเมนูเปิดอยู่ ให้ซ่อนเมนูอัตโนมัติเมื่อกดกลับบนสุด
+            if(window.innerWidth <= 768 && sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+                menuToggle.innerHTML = '☰ Menu';
+            }
+        });
+    </script>
+</body>
+</html>
