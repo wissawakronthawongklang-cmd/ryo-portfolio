@@ -135,7 +135,7 @@
             width: 90px;
             height: 90px;
             border-radius: 50%; /* ทำให้เป็นวงกลม */
-            background-color: #222;
+            background-color: #ffffff;
             border: 2px solid #444;
             display: flex;
             align-items: center;
@@ -150,7 +150,7 @@
         .brand-circle img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* ตัดรูปให้เต็มวงกลมพอดี */
+            object-fit: contain; /* ตัดรูปให้เต็มวงกลมพอดี */
             /* หากโลโก้คุณเป็นพื้นหลังขาว ให้เปลี่ยนเป็น object-fit: contain; แทน */
         }
 
