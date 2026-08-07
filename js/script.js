@@ -39,3 +39,36 @@
                 menuToggle.innerHTML = '☰ Menu';
             }
         });
+
+        function playVideo(cardElement) {
+            // 1. รีเซ็ตการแสดงผลการ์ดอื่นๆ ทั้งหมด
+            const allCards = document.querySelectorAll('.video-card');
+            allCards.forEach(card => {
+                if (card !== cardElement) {
+                    card.classList.remove('playing');
+                    const iframe = card.querySelector('iframe');
+                    const poster = card.querySelector('.video-poster');
+                    const playBtn = card.querySelector('.play-button');
+
+                    iframe.src = ""; 
+                    poster.style.display = "block";
+                    playBtn.style.display = "flex";
+                }
+            });
+
+            // 2. เปิดใช้งานการ์ดที่ถูกคลิก
+            cardElement.classList.add('playing');
+            const iframe = cardElement.querySelector('iframe');
+            const poster = cardElement.querySelector('.video-poster');
+            const playBtn = cardElement.querySelector('.play-button');
+
+            const dataSrc = iframe.getAttribute('data-src');
+            if (iframe.src === "" || !iframe.src.includes(dataSrc)) {
+                iframe.src = dataSrc + "?autoplay=1";
+            }
+
+            // ซ่อนภาพปกและปุ่ม Play
+            poster.style.display = "none";
+            playBtn.style.display = "none";
+            
+        }

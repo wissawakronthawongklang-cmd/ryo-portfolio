@@ -1,4 +1,4 @@
-     /* ================= Reset & Global ================= */
+  /* ================= Reset & Global ================= */
         * {
             margin: 0;
             padding: 0;
@@ -83,9 +83,9 @@
         /* ================= Header Image ================= */
         .header-hero {
             position: relative;
+            background-image: url("img/cover1.webp");
             width: 100%;
             height: 400px;
-            background-image: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=1600&q=80');
             background-size: cover;
             background-position: center;
         }
@@ -161,6 +161,8 @@
             gap: 30px;
         }
         .video-card {
+            position: relative;
+            cursor: pointer;
             width: 100%;
             aspect-ratio: 9 / 16;
             background-color: #222;
@@ -177,6 +179,53 @@
             height: 100%;
             border: none;
         }
+
+        /* ภาพปกวิดีโอ */
+        .video-poster {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 2;
+            transition: opacity 0.3s ease;
+        }
+
+        /* ปุ่ม Play จำลองตรงกลางภาพปก */
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background-color: rgba(0, 0, 0, 0.6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 4;
+            cursor: pointer;
+            pointer-events: none; /* ให้คลิกทะลุไปโดนตัวภาพปก */
+        }
+
+        .play-button::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 10px 0 10px 18px;
+            border-color: transparent transparent transparent #ffffff;
+            margin-left: 4px;
+        }
+
+        .video-card:hover .play-button {
+            background-color: rgba(255, 0, 0, 0.8);
+        }
+
+
 
         /* ================= Footer Section (เพิ่มใหม่) ================= */
         .site-footer {
