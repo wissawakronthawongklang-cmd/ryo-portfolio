@@ -83,7 +83,7 @@
         /* ================= Header Image ================= */
         .header-hero {
             position: relative;
-            background-image: url("img/cover1.webp");
+            background-image: url('img/cover1.webp');
             width: 100%;
             height: 400px;
             background-size: cover;
